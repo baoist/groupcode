@@ -2,3 +2,9 @@ body {
   font-family: helvetica, arial, sans-serif;
   background: #333333;
 }
+
+#wrapper {
+  width: 1000px;
+  padding: 15px;
+  background: #fff;
+}

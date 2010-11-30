@@ -8,13 +8,14 @@ process.addListener('uncaughtException', function(err, stack) {
 })
 
 var express = require('express')
-, app = express.createServer()
-, fs = require('fs');
+, extras = require('express-extras')
+, fs = require('fs')
+, YUI = require('yui3').YUI
+, CONTENT = '#body';
 
-app.register('.haml', require('hamljs'));
+var app = module.exports = express.createServer();
 
-app.set('views', __dirname + '/public');
-
+/*
 app.get('/', function(req, res){
   res.redirect('/signin');
 });
@@ -33,13 +34,19 @@ app.get('/projects/:user', function(req, res) {
 
   var gzip = require('gzip').gzip;
 
-  var file = new fs.ReadStream(__dirname+'/vendor/test.txt'); 
+  var file = new fs.ReadStream(__dirname+'/vendor/test.txt', {encoding: 'utf8'}); 
 
   res.writeHead(200, {
-    'Content-Type': 'application/x-javascript'
+    'Content-Type': 'text/plain'
   });
 
-  res.write(file.toString());
+  var te = fs.readFile(__dirname+'/vendor/test.txt', {encoding: 'utf8'}, function(err, data) {
+    if(err) throw err;
+
+    console.log(data.toString);
+  })
+
+  console.log(te);
 
   gzip(__dirname+'/vendor/test.txt', 'binary', function(err, data){
     var buf = new Buffer(256)
@@ -51,5 +58,53 @@ app.get('/projects/:user', function(req, res) {
   res.write(user);
   res.end();
 })
+*/
 
-app.listen(3232);
+YUI({ debug: false }).use('express', 'node', function(Y) {
+  app.configure(function(){
+    app.use(extras.fixIP());
+    app.use(extras.throttle({ holdTime: 5 }));
+
+    // app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
+    app.use(express.logger());
+    app.use(express.methodOverride());
+    app.use(express.bodyDecoder());
+    app.use(express.cookieDecoder());        
+    app.use(express.conditionalGet());
+    app.use(express.cache());
+    app.use(express.gzip());        
+    app.use(express.staticProvider(__dirname + '/public'));
+    app.use(app.router);
+    app.set('views', __dirname + '/public');
+  });
+  
+  app.get('/combo', YUI.combo);
+
+  app.register('.html', YUI);
+
+  YUI.partials = [
+    {
+      name: 'includes'
+      , node: 'head'
+    }
+  ]
+
+  YUI.configure(app, {
+    yui2: '/yui2/',
+    yui3: '/yui3/'
+  });
+
+  app.get('/', function(req, res) {
+    res.redirect('/signin');
+  })
+
+  app.get('/signin', function(req, res) {
+    res.render('index.html', {
+      locals: {
+        content: CONTENT
+      }
+    })
+  })
+})
+
+app.listen('3232');
