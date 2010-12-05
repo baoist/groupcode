@@ -72,10 +72,43 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
   })
 
   app.post('/signin', function(req, res) {
+    res.redirect('/signin/'+req.body.name);
+  })
+
+  app.get('/signin/:name', function(req, res) {
     var name = 't1'// req.body.name
     , dbConn = require('./lib/db.js')
     , projects = new GetProjects('localhost', 27017).findByUser(name, function(err, docs) {
-      console.log(docs);
+      
+      var proj = []
+      , heading
+      , status;
+
+      for(var j = 0; j < docs.length; j++) {
+        proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + '}');
+      }
+
+      console.log(proj.length);
+
+      if(proj.length > 0) {
+        heading = 'Create or select a project.'
+        status = 'closed'
+      } else {
+        heading = 'Please create a project or enter the project id you wish to join.'
+        status = 'open'
+      }
+
+      res.render('projlist.html', {
+        locals: {
+          content: CONTENT
+          , sub: {
+            test: proj
+            , proj_result_list: heading
+            , state: status
+            , username: name
+          }
+        }
+      })
     });
   })
 

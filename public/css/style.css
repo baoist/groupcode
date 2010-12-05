@@ -39,16 +39,40 @@ body {
   font-weight: normal;
 }
 
-#body .signin {
+#body .signin, #body .createproj {
   margin-left: 200px;
   width: 660px;
 }
 
-#body .signin h2 {
+#body .createproj {
+  margin: 30px 0 30px 200px;
+  float: left;
+}
+
+#body .createproj#closed {
+  display: none;
+}
+
+#body .createproj#open {
+  display: block;
+}
+
+#body .proj_list {
+  float: left;
+  margin: 10px 0 0 0;
+}
+
+#body .signin h2, #body h2.proj_message {
   font-size: 30px;
   font-family: "HelveticaNeue", "Helvetica Neue (T1)", "Helvetica Neue (TT)", "Helvetica Neue";
   font-weight: 200;
   line-height: 36px;
+}
+
+#body h2.proj_message {
+  margin-left: 200px;
+  width: 660px;
+  float: left;
 }
 
 #body .signin p {
@@ -57,7 +81,7 @@ body {
   margin: 15px 0 30px 0;
 }
 
-#body .signin input {
+#body input {
   height: 28px;
   padding: 0;
   display: block;
@@ -71,11 +95,24 @@ body {
   margin-top: 1px;
 }
 
-#body .signin input#name:focus {
+#body input#name:focus, #body input#project_name:focus {
   border: 1px solid #c9ce37;
 }
 
-#body .signin input#submit {
+#body input#project_name {
+  width: 335px;
+}
+
+label {
+  float: left;
+  font-family: "DIN", Helvetica, sons-serif;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 7px;
+  margin-right: 10px;
+}
+
+#body input#submit {
   width: 95px;
   border: 1px solid #7c7c7c;
   color: #7c7c7c;
@@ -91,7 +128,29 @@ body {
   margin-top: 0;
 }
 
-#body .signin input#submit:hover {
+#body input#submit:hover {
+  color: #c9ce37;
+}
+
+#body input#submit.project {
+  width: 165px;
+}
+
+#body a#create_project {
+  width: 173px;
+  height: 26px;
+  font-size: 18px;
+  display: block;
+  background: url(../images/show_form.png) no-repeat top left;
+  float: right;
+  text-decoration: none;
+  color: #7c7c7c;
+  font-family: "HelveticaNeue", "Helvetica Neue (T1)", "Helvetica Neue (TT)", "Helvetica Neue";
+  font-weight: bold;
+  padding: 6px 0 0 10px;
+}
+
+#body a#create_project:hover {
   color: #c9ce37;
 }
 
