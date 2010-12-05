@@ -72,12 +72,27 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
   })
 
   app.post('/signin', function(req, res) {
-    var dbConn = require('./lib/db.js')
-    , projects = new GetProjects('localhost', PORT);
+    var name = 't1'// req.body.name
+    , dbConn = require('./lib/db.js')
+    , projects = new GetProjects('localhost', 27017).findByUser(name, function(err, docs) {
+      console.log(docs);
+    });
+  })
 
-    console.log(projects);
-    // gets the name of the user.
-    var name = req.body.name;
+  app.get('/save', function(req, res) {
+    var self = this;
+
+    var dbConn = require('./lib/db.js')
+    , projects = GetProjects('localhost', PORT);
+
+    GetProjects.save({
+      creator: 'baoist'
+      , contributors: 'jakedahn'
+      , name: 'socode_dummy_project'
+      , location: '/public/projects/test'
+    }, function(err, docs) {
+      self.redirect('/signin');
+    })
   })
 })
 
