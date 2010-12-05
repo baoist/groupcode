@@ -11,54 +11,10 @@ var express = require('express')
 , extras = require('express-extras')
 , fs = require('fs')
 , YUI = require('yui3').YUI
-, CONTENT = '#body';
+, CONTENT = '#body'
+, PORT = '3232';
 
 var app = module.exports = express.createServer();
-
-/*
-app.get('/', function(req, res){
-  res.redirect('/signin');
-});
-
-app.get('/signin', function(req, res) {
-  res.render('index.haml', {
-    layout: 'layout.haml'
-    , locals: {
-      title: 'SoCode - Sign In'
-    }
-  });
-});
-
-app.get('/projects/:user', function(req, res) {
-  var user = req.params.user;
-
-  var gzip = require('gzip').gzip;
-
-  var file = new fs.ReadStream(__dirname+'/vendor/test.txt', {encoding: 'utf8'}); 
-
-  res.writeHead(200, {
-    'Content-Type': 'text/plain'
-  });
-
-  var te = fs.readFile(__dirname+'/vendor/test.txt', {encoding: 'utf8'}, function(err, data) {
-    if(err) throw err;
-
-    console.log(data.toString);
-  })
-
-  console.log(te);
-
-  gzip(__dirname+'/vendor/test.txt', 'binary', function(err, data){
-    var buf = new Buffer(256)
-    , len = buf.write(data.toString());
-
-    sys.puts(len);
-  });
-
-  res.write(user);
-  res.end();
-})
-*/
 
 YUI({ debug: false }).use('express', 'node', function(Y) {
   app.configure(function(){
@@ -90,21 +46,39 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
   ]
 
   YUI.configure(app, {
-    yui2: '/yui2/',
-    yui3: '/yui3/'
+    yui2: '/yui2/'
+    , yui3: '/yui3/'
   });
 
   app.get('/', function(req, res) {
-    res.redirect('/signin');
-  })
-
-  app.get('/signin', function(req, res) {
-    res.render('index.html', {
+    res.render('signin.html', {
       locals: {
         content: CONTENT
       }
     })
   })
+
+  app.get('/signin', function(req, res) {
+    var TITLE = 'Sign in page';
+
+    res.render('signin.html', {
+      locals: {
+        content: CONTENT
+        , after: function(Y, options, partial) {
+          Y.one('title').set('innerHTML', TITLE);
+        }
+      }
+    })
+  })
+
+  app.post('/signin', function(req, res) {
+    var dbConn = require('./lib/db.js')
+    , projects = new GetProjects('localhost', PORT);
+
+    console.log(projects);
+    // gets the name of the user.
+    var name = req.body.name;
+  })
 })
 
-app.listen('3232');
+app.listen(PORT);
