@@ -76,9 +76,11 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
   })
 
   app.get('/signin/:name', function(req, res) {
-    var name = 't1'// req.body.name
+    var name = req.params.name
     , dbConn = require('./lib/db.js')
     , projects = new GetProjects('localhost', 27017).findByUser(name, function(err, docs) {
+
+      console.log(name)
       
       var proj = []
       , heading
@@ -87,8 +89,6 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
       for(var j = 0; j < docs.length; j++) {
         proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + '}');
       }
-
-      console.log(proj.length);
 
       if(proj.length > 0) {
         heading = 'Create or select a project.'
@@ -112,19 +112,18 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
     });
   })
 
-  app.get('/save', function(req, res) {
+  app.post('/save', function(req, res) {
     var self = this;
 
     var dbConn = require('./lib/db.js')
-    , projects = GetProjects('localhost', PORT);
+    , projects = new GetProjects('localhost', 27017);
 
-    GetProjects.save({
-      creator: 'baoist'
-      , contributors: 'jakedahn'
-      , name: 'socode_dummy_project'
-      , location: '/public/projects/test'
+    projects.save({
+      creator: req.body.username
+      , name: req.body.project_name
+      , location: '/public/projects/'+req.body.project_name
     }, function(err, docs) {
-      self.redirect('/signin');
+      res.redirect('/signin/' + req.body.username);
     })
   })
 })

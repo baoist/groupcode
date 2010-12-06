@@ -1,0 +1,15 @@
+<h2 class="proj_message">{proj_result_list}</h2>
+
+<a href="#" id="create_project">NEW PROJECT</a>
+
+<div class="createproj" id="{state}">
+  <form action="/save" method="POST" id="create_proj_form">
+    <label for="project_name">Project Name</label><input type="text" name="project_name" value="" id="project_name">
+    <input type="hidden" id="username" name="username" value="{username}" />
+    <input type="submit" value="CREATE PROJECT" id="submit" class="project" />
+  </form>
+</div>
+
+<div class="proj_list">
+  {test}
+</div>
