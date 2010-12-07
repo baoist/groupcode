@@ -10,5 +10,7 @@ $(function() {
         .stop().slideUp(300)
         .attr('id', 'closed');
     }
+
+    return false;
   })
 })

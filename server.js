@@ -79,15 +79,12 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
     var name = req.params.name
     , dbConn = require('./lib/db.js')
     , projects = new GetProjects('localhost', 27017).findByUser(name, function(err, docs) {
-
-      console.log(name)
-      
       var proj = []
       , heading
       , status;
 
       for(var j = 0; j < docs.length; j++) {
-        proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + '}');
+        proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + ' }');
       }
 
       if(proj.length > 0) {
@@ -123,6 +120,11 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
       , name: req.body.project_name
       , location: '/public/projects/'+req.body.project_name
     }, function(err, docs) {
+      var fileConn = require('./lib/filehandle.js')
+      , fileHandle = new FileHandle();
+
+      fileHandle.createDir(__dirname + '/projects/' + req.body.project_name + '/');
+
       res.redirect('/signin/' + req.body.username);
     })
   })
