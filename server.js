@@ -125,7 +125,22 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
 
       fileHandle.createDir(__dirname + '/projects/' + req.body.project_name + '/');
 
-      res.redirect('/signin/' + req.body.username);
+      console.log(docs[0]._id);
+
+      res.redirect('/project/' + docs[0]._id);
+    })
+  })
+
+  app.get('/project/:id', function(req, res) {
+    var self = this
+    , id = req.params.id;
+
+    console.log(id);
+
+    res.render('project.html', {
+      locals: {
+        content: CONTENT
+      }
     })
   })
 })
