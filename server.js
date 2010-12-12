@@ -83,8 +83,11 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
       , heading
       , status;
 
+      console.log(docs)
+
       for(var j = 0; j < docs.length; j++) {
-        proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + ' }');
+        // proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + ' }');
+        proj.push('<div class="proj_sect"><a href="/project/'+ docs[j]._id +'/readme.txt">'+ docs[j].name +'</a></div>');
       }
 
       if(proj.length > 0) {
@@ -125,23 +128,35 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
 
       fileHandle.createDir(__dirname + '/projects/' + req.body.project_name + '/');
 
-      console.log(docs[0]._id);
-
-      res.redirect('/project/' + docs[0]._id);
+      res.redirect('/project/' + docs[0]._id + '/readme.txt');
     })
   })
 
-  app.get('/project/:id', function(req, res) {
+  app.get('/project/:id/:file?.:format?', function(req, res) {
     var self = this
-    , id = req.params.id;
+    , id = req.params.id
+    , file = req.params.file
+    , format = req.params.format;
 
-    console.log(id);
+    if(file != undefined && format === undefined) {
+      console.log('-- file exists but format doesn\'t --')
+      file = 'readme'
+      , format = 'txt'
+    }
 
-    res.render('project.html', {
-      locals: {
-        content: CONTENT
-      }
-    })
+    console.log(file+'.'+format)
+
+    var dbConn = require('./lib/db.js')
+    , projects = new GetProjects('localhost', 27017).findById(id, function(err, doc) {
+      res.render('project.html', {
+        locals: {
+          content: CONTENT
+          , sub: {
+            projectname: doc.name
+          }
+        }
+      })
+    });
   })
 })
 
