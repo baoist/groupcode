@@ -1,0 +1,74 @@
+html {
+  cursor: text;
+}
+
+.editbox {
+  margin: .4em;
+  padding: 0;
+  font-family: monospace;
+  font-size: 10pt;
+  color: black;
+}
+
+pre.code, .editbox {
+  color: #c2bd98;
+}
+
+.editbox p {
+  margin: 0;
+}
+
+span.js-punctuation {
+  color: #c2bd98;
+}
+
+span.js-operator {
+  color: #c2bd98;
+}
+
+span.js-keyword {
+  color: #e2d78b;
+}
+
+span.js-atom {
+  color: #ad4547;
+}
+
+span.js-variable {
+  color: #8e623e;
+}
+
+span.js-variabledef {
+  color: #636d83;
+}
+
+span.js-localvariable {
+  color: #636d83;
+}
+
+span.js-property {
+  color: #c2bd98;
+}
+
+span.js-comment {
+  color: #8a9891;
+  font-style: italic;
+}
+
+span.js-string {
+  color: #6e8e57;
+}
+
+.editbox {
+  background: #333333 url('../images/numband.png') repeat-y 0 3px !important;
+  overflow-y: scroll;
+  width: 624px;
+  height: 925px;
+  background: #333333;
+  color: #c1c1c1;
+  padding-left: 28px;
+  font-family: Monaco;
+  line-height: 14px;
+  font-size: 12px;
+  border: none !important;
+}

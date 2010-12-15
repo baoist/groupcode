@@ -1,3 +1,15 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script src="/js/codemirror.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  $(function() {
+  var editor = CodeMirror.fromTextArea('editor', {
+    height: "dynamic",
+    parserfile: "parsejs.js",
+    stylesheet: "/css/jscolors.css",
+    path: "/js/"
+  })
+  })
+</script>
 <div id="left_sidebar">
   <div id="left_head">
     <h2>{projectname}</h2>
@@ -11,9 +23,57 @@
     <h2>{filename}</h2>
   </div>
   <div id="main_body">
-    <canvas id="editor" width="656" height="926">
-      {filecontents}
-    </canvas>
+    <textarea width="656" height="925" id="editor">
+var Db = require('mongodb/db').Db
+, ObjectID = require('mongodb/bson/bson').ObjectID
+, Server = require('mongodb/connection').Server;
+
+GetProjects = function(host, port) {
+  this.db = new Db('socode', new Server(host, port, {auto_reconnect: true}, {}));
+  this.db.open(function(){});
+};
+
+GetProjects.prototype.getCollection = function(callback) {
+  this.db.collection('socode', function(error, socode_proj) {
+    if( error ) callback(error);
+    else callback(null, socode_proj);
+  });
+};
+
+GetProjects.prototype.findAll = function(callback) {
+  this.getCollection(function(error, socode_proj) {
+    if( error ) callback(error)
+    else {
+      socode_proj.find(function(error, cursor) {
+        if( error ) callback(error)
+        else {
+          cursor.toArray(function(error, results) {
+            if( error ) callback(error)
+            else callback(null, results)
+          });
+        }
+      });
+    }
+  });
+};
+
+GetProjects.prototype.findByUser = function(username, callback) {
+  this.getCollection(function(error, socode_proj) {
+    if( error ) callback(error)
+    else {
+      socode_proj.find({creator: username}, function(error, cursor) {
+        if( error ) callback(error)
+        else {
+          cursor.toArray(function(error, results) {
+            if( error ) callback(error)
+            else callback(null, results)
+          })
+        }
+      });
+    }
+  });
+};
+</textarea>
   </div>
 </div>
 <div id="right_sidebar">
@@ -24,3 +84,5 @@
     <p>{colaborators}</p>
   </div>
 </div>
+
+<div id="get_text">{filetext}</div>

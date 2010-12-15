@@ -79,15 +79,13 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
     var name = req.params.name
     , dbConn = require('./lib/db.js')
     , projects = new GetProjects('localhost', 27017).findByUser(name, function(err, docs) {
-      var proj = []
+      var proj = ''
       , heading
       , status;
 
-      console.log(docs)
-
       for(var j = 0; j < docs.length; j++) {
         // proj.push('{ name: ' + docs[j].name + ', location: ' + docs[j].location + ' }');
-        proj.push('<div class="proj_sect"><a href="/project/'+ docs[j]._id +'/readme.txt">'+ docs[j].name +'</a></div>');
+        proj += '<div class="proj_sect"><a href="/project/'+ docs[j]._id +'/readme.txt">'+ docs[j].name +'</a></div>';
       }
 
       if(proj.length > 0) {
@@ -121,7 +119,7 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
     projects.save({
       creator: req.body.username
       , name: req.body.project_name
-      , location: '/public/projects/'+req.body.project_name
+      , location: '/projects/'+req.body.project_name
     }, function(err, docs) {
       var fileConn = require('./lib/filehandle.js')
       , fileHandle = new FileHandle();
@@ -139,24 +137,49 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
     , format = req.params.format;
 
     if(file != undefined && format === undefined) {
-      console.log('-- file exists but format doesn\'t --')
       file = 'readme'
-      , format = 'txt'
+      , format = 'txt';
+    } else if(file === undefined && format === undefined) {
+      file = 'readme'
+      , format = 'txt';
     }
-
-    console.log(file+'.'+format)
 
     var dbConn = require('./lib/db.js')
     , projects = new GetProjects('localhost', 27017).findById(id, function(err, doc) {
+      /*
+      require('./lib/filerw.js')
+      , rw = new rw();
+
+      console.log(rw);
+
+      var foo = rw.readInp(__dirname + doc.location + '/' + file + '.' + format);
+
+      console.log(foo)
+      */
+
       res.render('project.html', {
         locals: {
           content: CONTENT
           , sub: {
-            projectname: doc.name
+            projectname: doc.name 
+            , filename: file+'.'+format
+            , filetext: 'BINARY SOLO! 00101 01010101001 0101 010 10 010  1 100 101 010 10 10  \n 1010 10 10 10 10 01 10 01 01 01 01 01 01 01 01 010 10 10 01 01 010101010 101 01 01 01 0 101 01010101010 01 01011 010 10 10 1001 01 01 01 0101 01 010 10 10 1010100101 01 01 0 1010 10  010101 01 010 101 01 01 01 01 01 010 10 01 01 01 0 101 01 0 10 10 101 01 01 010 10 10 01 01 01 010 101 01 01 01 010 10 10 110 1 1 01 0 10 1 10010'
+            , format: format
           }
         }
       })
     });
+  })
+
+  app.get('/*', function(req, res) {
+    res.render('404.html', {
+      locals: {
+        content: CONTENT
+        , sub: {
+          title: '404'
+        }
+      }
+    })
   })
 })
 

@@ -161,3 +161,112 @@ label {
   padding: 10px 0 20px 0;
   border-top: 4px solid #333333;
 }
+
+h2.fourohfour {
+  font-size: 640px;
+}
+
+p.subfour {
+  font-size: 40px;
+  margin: -85px 0 0 192px;
+}
+
+#left_sidebar {
+  width: 200px;
+  height: 972px;
+  float: left;
+  border-right: 1px solid #333333;
+}
+
+#main_content {
+  width: 656px;
+  height: 968px;
+  margin-left: 1px;
+  float: left;
+}
+
+#right_sidebar {
+  float: left;
+  width: 200px;
+  height: 972px;
+  margin-left: 1px;
+  border-left: 1px solid #333333;
+}
+
+#left_sidebar h2, #main_content h2, #right_sidebar h2 {
+  font-size: 30px;
+  overflow: hidden;
+  font-family: "HelveticaNeue", "Helvetica Neue (T1)", "Helvetica Neue (TT)", "Helvetica Neue";
+  font-weight: 200;
+}
+
+#main_content h2 {
+  width: 550px;
+  margin-top: 8px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+#left_sidebar #left_head, #right_sidebar #right_head {
+  font-size: 24px;
+  border-bottom: 1px solid #333333;
+  padding: 12px 0 13px 0;
+  width: 200px;
+  height: 18px;
+}
+
+#left_sidebar h2, #right_sidebar h2 {
+  font-size: 24px;
+  padding: 0 0 0 10px;
+  width: 150px
+  text-transform: uppercase;
+}
+
+.proj_list {
+  width: 650px;
+  margin-left: 200px !important;
+  float: left;
+}
+
+.proj_list .proj_sect {
+  margin: 5px 0 15px 0;
+  font-size: 25px;
+  font-family: "DIN";
+}
+
+.proj_list .proj_sect a {
+  font-weight: bold;
+  color: #333333;
+}
+
+.proj_list .proj_sect a:hover {
+  color: #666;
+}
+
+#main_content textarea {
+  background: #333333 url('../images/numband.png') repeat-y 0 1px;
+}
+
+#get_text {
+  display: none;
+}
+
+textarea {
+  overflow-y: scroll;
+}
+
+#editor {
+  width: 624px;
+  height: 925px;
+  background: #333333;
+  color: #c1c1c1;
+  padding-left: 28px;
+  font-family: Monaco;
+  line-height: 14px;
+  font-size: 12px;
+  border: none !important;
+}
+
+#main_body {
+  height: 956px;
+}
