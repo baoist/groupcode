@@ -51,6 +51,7 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
   });
 
   app.get('/', function(req, res) {
+    res.redirect('/signin', 301)
     res.render('signin.html', {
       locals: {
         content: CONTENT
@@ -157,18 +158,39 @@ YUI({ debug: false }).use('express', 'node', function(Y) {
       console.log(foo)
       */
 
+var filetext = "var x = 5;";
+
+
       res.render('project.html', {
         locals: {
           content: CONTENT
           , sub: {
-            projectname: doc.name 
+            projectname: doc.name
             , filename: file+'.'+format
-            , filetext: 'BINARY SOLO! 00101 01010101001 0101 010 10 010  1 100 101 010 10 10  \n 1010 10 10 10 10 01 10 01 01 01 01 01 01 01 01 010 10 10 01 01 010101010 101 01 01 01 0 101 01010101010 01 01011 010 10 10 1001 01 01 01 0101 01 010 10 10 1010100101 01 01 0 1010 10  010101 01 010 101 01 01 01 01 01 010 10 01 01 01 0 101 01 0 10 10 101 01 01 010 10 10 01 01 01 010 101 01 01 01 010 10 10 110 1 1 01 0 10 1 10010'
-            , format: format
+            , creator: doc.creator
+            , title: doc.name
+            , textcontent: filetext
+            , id: id
           }
         }
       })
     });
+  })
+
+  app.post('/join', function(req, res) {
+    res.redirect('/project/'+req.body.proj_id);
+  })
+
+  app.post('/newfile/:id', function(req, res) {
+    var id = req.params.id;
+    var fileName = req.body.addfile.split('.');
+
+    var fileConn = require('./lib/filehandle.js')
+    , fileHandle = new FileHandle();
+
+    fileHandle.createFile(__dirname + '/projects/' + req.body.project_name + '/' + fileName[0], fileName[1], 'This is the new file you created, '+fileName[0]+'.'+fileName[1]);
+
+    res.redirect('/project/' + id + '/' + fileName[0] + '.' + fileName[1]);
   })
 
   app.get('/*', function(req, res) {

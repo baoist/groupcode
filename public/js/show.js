@@ -13,4 +13,16 @@ $(function() {
 
     return false;
   })
+
+  $('.signin #name').focus();
+
+  $('#add a').click(function() {
+    $('#add form').toggle();
+    return false;
+  })
+
+  $('#add input[type=text]').focus(function() {
+    $(this).val('');
+    return false;
+  })
 })

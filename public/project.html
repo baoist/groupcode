@@ -1,20 +1,47 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <script src="/js/codemirror.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/periodic.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-  $(function() {
+$(function() {
   var editor = CodeMirror.fromTextArea('editor', {
     height: "dynamic",
-    parserfile: "parsejs.js",
+    parserfile: ["parsejs.js"],
     stylesheet: "/css/jscolors.css",
     path: "/js/"
   })
+
+  $('#add a').click(function() {
+    $('#editor').val(editor.getCode()); //run this every change.
   })
+
+  /*
+  var interval = 0;
+
+  $('body').at_intervals(function() {
+    if(interval > 0 && $('#editor').val() != editor.getCode()) {
+      editor.setCode($('#editor').val());  
+    }
+    interval++;
+  }, {delay: 2000});
+  */
+})
 </script>
 <div id="left_sidebar">
   <div id="left_head">
     <h2>{projectname}</h2>
   </div>
   <div class="left_body">
+    <div id="add">
+      <a href="#">
+        <img src="/images/plus.png" />
+        <p>ADD FILE</p>
+      </a>
+      <form action="/newfile/{id}" method="POST" id="addfileform">
+        <input type="text" id="addfile" name="addfile" value="fillerfile.js">
+        <input type="hidden" id="project_name" name="project_name" value="{projectname}">
+        <input type="submit" value="CREATE FILE"/>
+      </form>
+    </div>
     {projfilelist}
   </div>
 </div>
@@ -23,56 +50,8 @@
     <h2>{filename}</h2>
   </div>
   <div id="main_body">
-    <textarea width="656" height="925" id="editor">
-var Db = require('mongodb/db').Db
-, ObjectID = require('mongodb/bson/bson').ObjectID
-, Server = require('mongodb/connection').Server;
-
-GetProjects = function(host, port) {
-  this.db = new Db('socode', new Server(host, port, {auto_reconnect: true}, {}));
-  this.db.open(function(){});
-};
-
-GetProjects.prototype.getCollection = function(callback) {
-  this.db.collection('socode', function(error, socode_proj) {
-    if( error ) callback(error);
-    else callback(null, socode_proj);
-  });
-};
-
-GetProjects.prototype.findAll = function(callback) {
-  this.getCollection(function(error, socode_proj) {
-    if( error ) callback(error)
-    else {
-      socode_proj.find(function(error, cursor) {
-        if( error ) callback(error)
-        else {
-          cursor.toArray(function(error, results) {
-            if( error ) callback(error)
-            else callback(null, results)
-          });
-        }
-      });
-    }
-  });
-};
-
-GetProjects.prototype.findByUser = function(username, callback) {
-  this.getCollection(function(error, socode_proj) {
-    if( error ) callback(error)
-    else {
-      socode_proj.find({creator: username}, function(error, cursor) {
-        if( error ) callback(error)
-        else {
-          cursor.toArray(function(error, results) {
-            if( error ) callback(error)
-            else callback(null, results)
-          })
-        }
-      });
-    }
-  });
-};
+<textarea width="656" height="925" id="editor">
+{textcontent}
 </textarea>
   </div>
 </div>
@@ -81,8 +60,6 @@ GetProjects.prototype.findByUser = function(username, callback) {
     <h2>{creator}</h2>
   </div>
   <div id="right_body">
-    <p>{colaborators}</p>
+    <p></p>
   </div>
 </div>
-
-<div id="get_text">{filetext}</div>
